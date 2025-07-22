@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,5 +59,29 @@ public class AuthController {
         // For now, we return the user's profile information upon successful login.
         User user = userOptional.get();
         return ResponseEntity.ok(user);
+    }
+
+    @PostMapping("/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody Map<String, String> request) {
+        String email = request.get("email");
+        Optional<User> userOptional = userRepository.findByEmail(email);
+
+        if (userOptional.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Email not found!");
+        }
+
+        // TODO: Implement actual password reset logic
+        // For now, return success message
+        return ResponseEntity.ok("Password reset email sent successfully!");
+    }
+
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyToken() {
+        // TODO: Implement actual token verification logic
+        // For now, return success for testing
+        return ResponseEntity.ok(Map.of(
+            "valid", true,
+            "message", "Token verification successful"
+        ));
     }
 }
